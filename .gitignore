@@ -2,4 +2,6 @@ node_modules
 build
 Assesment questions/
 .idea
+.next
 *pdf
+15. Building React Apps with TypeScript
