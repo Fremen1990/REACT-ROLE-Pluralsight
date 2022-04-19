@@ -1,10 +1,11 @@
+import { useContext } from "react";
 import Speaker from "./Speaker";
 import ReactPlaceHolder from "react-placeholder";
-import useRequestDelay, {REQUEST_STATUS} from "../hooks/useRequestDelay";
-import {data} from "../../SpeakerData";
-import CircleLoader from "react-spinners/CircleLoader";
-import {SpeakerFilterContext} from '../contextx/SpeakerFilterContext'
-import {useContext} from "react";
+// import useRequestDelay, { REQUEST_STATUS } from "../hooks/useRequestDelay";
+import useRequestRest, { REQUEST_STATUS } from "../hooks/useRequestRest";
+import { data } from "../../SpeakerData";
+import { SpeakerFilterContext } from "../contexts/SpeakerFilterContext";
+import SpeakerAdd from "./SpeakerAdd";
 
 function SpeakersList() {
 	const {
@@ -12,10 +13,11 @@ function SpeakersList() {
 		requestStatus,
 		error,
 		updateRecord,
-	} = useRequestDelay(2000, data);
+		insertRecord,
+		deleteRecord
+	} = useRequestRest();
 
-
-	const {searchQuery, eventYear} = useContext(SpeakerFilterContext)
+	const { searchQuery, eventYear } = useContext(SpeakerFilterContext);
 
 	if (requestStatus === REQUEST_STATUS.FAILURE) {
 		return (
@@ -28,54 +30,43 @@ function SpeakersList() {
 	//if (isLoading === true) return <div>Loading...</div>
 
 	return (
-		<div className="container speakers-list d-flex  justify-content-center">
-			{/*<ReactPlaceHolder*/}
-			{/*	type="media"*/}
-			{/*	rows={15}*/}
-			{/*	className="speakerslist-placeholder"*/}
-			{/*	ready={requestStatus === REQUEST_STATUS.SUCCESS}*/}
-			{/*>*/}
+		<div className="container speakers-list">
+			<ReactPlaceHolder
+				type="media"
+				rows={15}
+				className="speakerslist-placeholder"
+				ready={requestStatus === REQUEST_STATUS.SUCCESS}
+			>
 
+				<SpeakerAdd eventYear={eventYear} insertRecord={insertRecord}/>
 
-			{requestStatus === "loading" ?
-				<CircleLoader size={150} color="#51b5b1"/>
-				:
 				<div className="row">
 					{speakersData
-
-						.filter(speaker =>
-
-							speaker.first.toLowerCase().includes(searchQuery) ||
-							speaker.last.toLowerCase().includes(searchQuery)
-						)
-
-						.filter(speaker =>
-							speaker.sessions.find(session =>
-								session.eventYear === eventYear
-							))
-
+						.filter(function (speaker) {
+							return (
+								speaker.first.toLowerCase().includes(searchQuery) ||
+								speaker.last.toLowerCase().includes(searchQuery)
+							);
+						})
+						.filter(function (speaker) {
+							return speaker.sessions.find((session) => {
+								return session.eventYear === eventYear;
+							});
+						})
 						.map(function (speaker) {
 							return (
 								<Speaker
 									key={speaker.id}
 									speaker={speaker}
-									onFavoriteToggle={(doneCallback) => {
-										updateRecord({
-											...speaker,
-											favorite: !speaker.favorite,
-										}, doneCallback);
-									}}
+									updateRecord={updateRecord}
+									insertRecord={insertRecord}
+									deleteRecord={deleteRecord}
 								/>
 							);
 						})}
 				</div>
-			}
-
-
-			{/*</ReactPlaceHolder>*/}
+			</ReactPlaceHolder>
 		</div>
-
-
 	);
 }
 

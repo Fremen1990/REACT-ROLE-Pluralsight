@@ -1,6 +1,6 @@
 import SpeakersToolbar from "./SpeakersToolbar";
 import SpeakersList from "./SpeakersList";
-import {SpeakerFilterProvider} from "../contextx/SpeakerFilterContext";
+import {SpeakerFilterProvider} from "../contexts/SpeakerFilterContext";
 
 const Speakers = () => {
 

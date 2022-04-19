@@ -1,6 +1,6 @@
 import {useContext} from "react";
-import ThemeProvider from "../contextx/ThemeContext";
-import {ThemeContext} from '../contextx/ThemeContext'
+import ThemeProvider from "../contexts/ThemeContext";
+import {ThemeContext} from '../contexts/ThemeContext'
 
 const Layout =({startingTheme, children})=>{
 	return(
