@@ -1,7 +1,8 @@
 import {ThemeContext} from '../contexts/ThemeContext'
 import {useContext} from "react";
+import withAuth from './withAuth'
 
-const Header = () => {
+const Header = ({loggedInUser, setLoggedInUser}) => {
 
 	const {theme} = useContext(ThemeContext)
 
@@ -19,10 +20,31 @@ const Header = () => {
 						</h4>
 					</div>
 					<div className={theme==="light"? "" : "text-info"}>
-						Hello Mr. Smitch &nbsp;&nbsp;
-						<span>
-							<a href="">sign-out</a>
-						</span>
+
+						{loggedInUser && loggedInUser.length > 0 ? (
+							<div>
+								<span>Logged in as {loggedInUser} </span>
+								<button
+									className="btn btn-secondary"
+									onClick={() => {
+										setLoggedInUser("");
+									}}
+								>
+									Logout
+								</button>
+							</div>
+						) : (
+							<button
+								className="btn btn-secondary"
+								onClick={(e) => {
+									e.preventDefault();
+									const username = window.prompt("Enter Login name:", "");
+									setLoggedInUser(username);
+								}}
+							>
+								login
+							</button>
+						)}
 					</div>
 				</div>
 			</div>
@@ -30,4 +52,4 @@ const Header = () => {
 	)
 }
 
-export default Header
+export default withAuth(Header);
