@@ -4,11 +4,14 @@ import Footer from "./Footer";
 import Header from "./Header";
 import Products from "./Products";
 import { Routes, Route } from "react-router-dom";
-import Detail from "./Detail";
+// import Detail from "./Detail";
+import Detail from "./Detail.class";
 import Cart from "./Cart";
-import Checkout from "./Checkout";
+// import Checkout from "./Checkout";
+import Checkout from "./Checkout.class";
 import cartReducer from "./cartReducer";
 import { CartContext } from "./cartContext";
+import { useCart } from "./cartContext";
 
 // let initialCart;
 // try {
@@ -19,6 +22,9 @@ import { CartContext } from "./cartContext";
 // }
 
 export default function App() {
+  // to be passed to class component Checkout.class.jsx
+  const { dispatch } = useCart();
+
   // const [cart, setCart] = useState(() => {
   //   try {
   //     return JSON.parse(localStorage.getItem("cart")) ?? [];
@@ -88,7 +94,8 @@ export default function App() {
               path="/checkout"
               element={
                 <Checkout
-                // cart={cart} dispatch={dispatch}
+                  // cart={cart}
+                  dispatch={dispatch}
                 />
               }
             />

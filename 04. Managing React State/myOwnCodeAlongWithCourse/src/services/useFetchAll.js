@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import useFetch from "./useFetch";
 
 export default function useFetchAll(urls) {
   const prevUrls = useRef([]);
@@ -39,4 +40,8 @@ function areEqual(array1, array2) {
     array1.length === array2.length &&
     array1.every((value, index) => value === array2[index])
   );
+}
+export function Fetch({ url, render }) {
+  const { data, loading, error } = useFetch(url);
+  return render(data, loading, error);
 }
